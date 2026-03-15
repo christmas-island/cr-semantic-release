@@ -1,7 +1,10 @@
-# Source-level config: only expose src/ contents, renamed to root.
-- include:
-    - "src/**"
-    - "src/.*"
-    - "src/.*/**"
+# Source-level config: exclude everything except src/.
+# Rename strips the src/ prefix for consumers.
+- exclude:
+    - "README.md"
+    - "LICENSE"
+    - ".github/**"
+    - "commitlint.config.js"
+    - ".releaserc.yaml"
 - rename:
     - "^src/(.+)": "%[1]s"
