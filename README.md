@@ -4,6 +4,8 @@ A [common-repo](https://github.com/common-repo/common-repo) source template for 
 
 ## What's Included
 
+Files distributed from `src/`:
+
 | File | Purpose |
 |---|---|
 | `.releaserc.yaml` | semantic-release config (conventionalcommits preset, changelog, git, GitHub release, major-tag) |
@@ -32,6 +34,7 @@ Or manually:
 - repo:
     url: https://github.com/christmas-island/cr-semantic-release
     ref: v1.0.0
+    path: src/
 ```
 
 ### Apply
@@ -40,6 +43,28 @@ Or manually:
 cr diff    # preview changes
 cr apply   # apply
 ```
+
+## Repo Structure
+
+```
+cr-semantic-release/
+├── .github/workflows/     ← this repo's own CI (dogfooding)
+│   ├── ci.yaml            ← sync check: top-level == src/
+│   ├── commitlint.yml     ← commit linting for this repo
+│   └── release.yaml       ← semantic release for this repo
+├── .releaserc.yaml        ← this repo's own release config
+├── commitlint.config.js   ← this repo's own commitlint
+├── README.md
+├── LICENSE
+└── src/                   ← distributed to consumers via path: src/
+    ├── .github/workflows/
+    │   ├── commitlint.yml
+    │   └── release.yaml
+    ├── .releaserc.yaml
+    └── commitlint.config.js
+```
+
+The top-level files and `src/` files are identical — the repo eats its own dog food. CI enforces they stay in sync.
 
 ## Prerequisites
 
@@ -62,12 +87,13 @@ The workflow calls `./.github/workflows/ci.yaml` as a prerequisite. Your repo mu
 
 ### Excluding files
 
-If you only want a subset of files:
+If you only want a subset:
 
 ```yaml
 - repo:
     url: https://github.com/christmas-island/cr-semantic-release
     ref: v1.0.0
+    path: src/
     with:
       - exclude: [".github/workflows/commitlint.yml"]
 ```
@@ -80,6 +106,7 @@ Use common-repo's YAML merge operator to patch specific fields:
 - repo:
     url: https://github.com/christmas-island/cr-semantic-release
     ref: v1.0.0
+    path: src/
 - yaml:
     source: my-releaserc-overrides.yaml
     dest: .releaserc.yaml
