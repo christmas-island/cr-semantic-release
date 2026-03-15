@@ -5,3 +5,9 @@
     - "src/.*/**"
 - rename:
     - "^src/(.*)$": "$1"
+- template:
+    - "src/.github/workflows/release.yaml"
+- template-vars:
+    GH_APP_ID_VAR: CHRISTMAS_ISLAND_APP_ID
+    GH_APP_KEY_SECRET: CHRISTMAS_ISLAND_PRIVATE_KEY
+    GH_APP_OWNER: christmas-island
