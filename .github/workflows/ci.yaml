@@ -16,7 +16,7 @@ jobs:
         run: |
           # Verify distributed files in src/ match the repo's own copies
           status=0
-          for file in .releaserc.yaml commitlint.config.js; do
+          for file in .releaserc.yaml commitlint.config.cjs; do
             if ! diff -q "$file" "src/$file" > /dev/null 2>&1; then
               echo "❌ $file differs from src/$file"
               diff --color "$file" "src/$file" || true
