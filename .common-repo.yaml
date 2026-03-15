@@ -1,4 +1,7 @@
 # Source-level config: only expose src/ contents, renamed to root.
-- include: ["src/**", "src/.*", "src/.github/**"]
+- include:
+    - "src/**"
+    - "src/.*"
+    - "src/.*/**"
 - rename:
-    - "^src/(.+)$": "$1"
+    - "^src/(.+)": "%[1]s"
