@@ -1,0 +1,11 @@
+# Source-level common-repo config.
+# Only files under src/ are distributed to consumers.
+# The rename strips the src/ prefix so they land at the repo root.
+- include:
+    patterns:
+      - "src/**"
+      - "src/.*"
+      - "src/.github/**"
+- rename:
+    - from: "^src/(.*)$"
+      to: "$1"
