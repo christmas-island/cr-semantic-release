@@ -15,24 +15,18 @@ Files distributed from `src/`:
 
 ## Usage
 
+> **Requires common-repo ≥ 0.28.0** for source-declared filtering.
+
 ### Add to an existing `.common-repo.yaml`
 
 ```yaml
 # .common-repo.yaml
 - repo:
     url: https://github.com/christmas-island/cr-semantic-release
-    ref: v1.0.0
-    with:
-      - include: ["src/**", "src/.*", "src/.*/**"]
-      - rename:
-          - "^src/(.*)$": "$1"
+    ref: v1.1.0
 ```
 
-> **Note:** Source-declared filtering is not yet functional in common-repo 0.27.0
-> ([#226](https://github.com/common-repo/common-repo/issues/226),
-> [#227](https://github.com/common-repo/common-repo/issues/227)).
-> The `with:` clause above is required until those are fixed, at which point
-> consumers will only need the `repo:` block.
+That's it. The source repo's `.common-repo.yaml` handles scoping to `src/` and stripping the prefix.
 
 ### Apply
 
@@ -45,6 +39,7 @@ cr apply   # apply
 
 ```
 cr-semantic-release/
+├── .common-repo.yaml      ← source-declared filtering (include src/, rename to root)
 ├── .github/workflows/     ← this repo's own CI (dogfooding)
 │   ├── ci.yaml            ← sync check: top-level == src/
 │   ├── commitlint.yml     ← commit linting for this repo
@@ -89,7 +84,7 @@ If you only want a subset:
 ```yaml
 - repo:
     url: https://github.com/christmas-island/cr-semantic-release
-    ref: v1.0.0
+    ref: v1.1.0
     with:
       - include: ["src/.releaserc.yaml", "src/commitlint.config.js"]
       - rename:
@@ -103,11 +98,7 @@ Use common-repo's YAML merge operator to patch specific fields:
 ```yaml
 - repo:
     url: https://github.com/christmas-island/cr-semantic-release
-    ref: v1.0.0
-    with:
-      - include: ["src/**", "src/.*", "src/.*/**"]
-      - rename:
-          - "^src/(.*)$": "$1"
+    ref: v1.1.0
 - yaml:
     source: my-releaserc-overrides.yaml
     dest: .releaserc.yaml
