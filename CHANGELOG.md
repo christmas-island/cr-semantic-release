@@ -1,3 +1,13 @@
+## [1.1.0](https://github.com/christmas-island/cr-semantic-release/compare/v1.0.1...v1.1.0) (2026-03-15)
+
+### Documentation
+
+* update usage for common-repo 0.27.0 workaround ([e99caf6](https://github.com/christmas-island/cr-semantic-release/commit/e99caf614571bb35b4a95c44dcd7f94011074bac)), closes [common-repo/common-repo#229](https://github.com/common-repo/common-repo/issues/229) [#230](https://github.com/christmas-island/cr-semantic-release/issues/230)
+
+### Features
+
+* restore source-declared filtering (requires common-repo >=0.28.0) ([8ba5ad3](https://github.com/christmas-island/cr-semantic-release/commit/8ba5ad3b433fd5edbd13c8c9452f77ea914869bd))
+
 ## [1.0.1](https://github.com/christmas-island/cr-semantic-release/compare/v1.0.0...v1.0.1) (2026-03-15)
 
 ### Miscellaneous
