@@ -1,3 +1,18 @@
+## [1.2.0](https://github.com/christmas-island/cr-semantic-release/compare/v1.1.0...v1.2.0) (2026-03-15)
+
+### Documentation
+
+* clean up README now that source filtering works on >=0.28.0 ([58003db](https://github.com/christmas-island/cr-semantic-release/commit/58003db568089843a5727a896cbb7b250e0f32ba))
+
+### Features
+
+* templatize GitHub App vars in release workflow ([402ea38](https://github.com/christmas-island/cr-semantic-release/commit/402ea389ee69ad21a40ad1a7d5d144324672fc72))
+
+### Bug Fixes
+
+* template glob should use post-rename path ([6345772](https://github.com/christmas-island/cr-semantic-release/commit/63457723cc0c26fbb1d17c5cf333b68f01ff991f))
+* template mark must use pre-rename path, move before rename ([d41cb34](https://github.com/christmas-island/cr-semantic-release/commit/d41cb341b463f24c6fe3891af16fb7354f92a956))
+
 ## [1.1.0](https://github.com/christmas-island/cr-semantic-release/compare/v1.0.1...v1.1.0) (2026-03-15)
 
 ### Documentation
