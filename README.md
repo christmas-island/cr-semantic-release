@@ -15,27 +15,24 @@ Files distributed from `src/`:
 
 ## Usage
 
-### Add to a new repo
-
-```bash
-cr init https://github.com/christmas-island/cr-semantic-release
-```
-
 ### Add to an existing `.common-repo.yaml`
-
-```bash
-cr add https://github.com/christmas-island/cr-semantic-release
-```
-
-Or manually:
 
 ```yaml
 # .common-repo.yaml
 - repo:
     url: https://github.com/christmas-island/cr-semantic-release
     ref: v1.0.0
-    path: src/
+    with:
+      - include: ["src/**", "src/.*", "src/.*/**"]
+      - rename:
+          - "^src/(.*)$": "$1"
 ```
+
+> **Note:** Source-declared filtering is not yet functional in common-repo 0.27.0
+> ([#226](https://github.com/common-repo/common-repo/issues/226),
+> [#227](https://github.com/common-repo/common-repo/issues/227)).
+> The `with:` clause above is required until those are fixed, at which point
+> consumers will only need the `repo:` block.
 
 ### Apply
 
@@ -56,7 +53,7 @@ cr-semantic-release/
 ├── commitlint.config.js   ← this repo's own commitlint
 ├── README.md
 ├── LICENSE
-└── src/                   ← distributed to consumers via path: src/
+└── src/                   ← distributed to consumers
     ├── .github/workflows/
     │   ├── commitlint.yml
     │   └── release.yaml
@@ -93,9 +90,10 @@ If you only want a subset:
 - repo:
     url: https://github.com/christmas-island/cr-semantic-release
     ref: v1.0.0
-    path: src/
     with:
-      - exclude: [".github/workflows/commitlint.yml"]
+      - include: ["src/.releaserc.yaml", "src/commitlint.config.js"]
+      - rename:
+          - "^src/(.*)$": "$1"
 ```
 
 ### Overriding `.releaserc.yaml`
@@ -106,7 +104,10 @@ Use common-repo's YAML merge operator to patch specific fields:
 - repo:
     url: https://github.com/christmas-island/cr-semantic-release
     ref: v1.0.0
-    path: src/
+    with:
+      - include: ["src/**", "src/.*", "src/.*/**"]
+      - rename:
+          - "^src/(.*)$": "$1"
 - yaml:
     source: my-releaserc-overrides.yaml
     dest: .releaserc.yaml
