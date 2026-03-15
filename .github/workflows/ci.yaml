@@ -25,7 +25,7 @@ jobs:
               echo "✅ $file matches src/$file"
             fi
           done
-          for file in .github/workflows/commitlint.yml .github/workflows/release.yaml; do
+          for file in .github/workflows/commitlint.yml; do
             if ! diff -q "$file" "src/$file" > /dev/null 2>&1; then
               echo "❌ $file differs from src/$file"
               diff --color "$file" "src/$file" || true
@@ -34,6 +34,8 @@ jobs:
               echo "✅ $file matches src/$file"
             fi
           done
+          # release.yaml intentionally differs: src/ uses template vars, top-level uses hardcoded defaults
+          echo "⏭️  .github/workflows/release.yaml skipped (template vars in src/)"
           if [ $status -ne 0 ]; then
             echo ""
             echo "Top-level files and src/ are out of sync."
