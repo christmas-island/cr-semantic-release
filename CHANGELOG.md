@@ -1,3 +1,9 @@
+## [1.3.0](https://github.com/christmas-island/cr-semantic-release/compare/v1.2.1...v1.3.0) (2026-03-15)
+
+### Features
+
+* restore template vars for GitHub App customization ([#1](https://github.com/christmas-island/cr-semantic-release/issues/1)) ([9c4c15d](https://github.com/christmas-island/cr-semantic-release/commit/9c4c15d722cee528df2987faf29d8d6380da79ff))
+
 ## [1.2.1](https://github.com/christmas-island/cr-semantic-release/compare/v1.2.0...v1.2.1) (2026-03-15)
 
 ### Bug Fixes
