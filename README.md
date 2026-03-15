@@ -15,7 +15,7 @@ Files distributed from `src/`:
 
 ## Usage
 
-> **Requires common-repo ≥ 0.28.0** for source-declared filtering.
+> **Requires common-repo ≥ 0.28.4** for source-declared filtering and template variable overrides.
 
 ### Add to an existing `.common-repo.yaml`
 
@@ -56,18 +56,35 @@ cr-semantic-release/
     └── commitlint.config.js
 ```
 
-The top-level files and `src/` files are identical — the repo eats its own dog food. CI enforces they stay in sync.
+The top-level files and `src/` files are identical — the repo eats its own dog food. CI enforces they stay in sync (except `release.yaml`, which uses template variables in `src/` and hardcoded defaults at the top level).
 
 ## Prerequisites
 
-The release workflow expects the following GitHub org-level vars and secrets:
+By default, the release workflow uses these GitHub org-level vars and secrets:
 
-| Name | Type | Purpose |
-|---|---|---|
-| `CHRISTMAS_ISLAND_APP_ID` | Variable | GitHub App ID for generating tokens |
-| `CHRISTMAS_ISLAND_PRIVATE_KEY` | Secret | GitHub App private key |
+| Name | Type | Default | Purpose |
+|---|---|---|---|
+| `CHRISTMAS_ISLAND_APP_ID` | Variable | — | GitHub App ID for generating tokens |
+| `CHRISTMAS_ISLAND_PRIVATE_KEY` | Secret | — | GitHub App private key |
 
 These are used by `actions/create-github-app-token` to generate a token with write permissions for creating releases and pushing tags/changelogs.
+
+### Using a different GitHub App
+
+Override the template variables in your consumer config to use your own app credentials:
+
+```yaml
+- repo:
+    url: https://github.com/christmas-island/cr-semantic-release
+    ref: v2.0.0
+    with:
+      - template-vars:
+          GH_APP_ID_VAR: MY_APP_ID          # GitHub vars name
+          GH_APP_KEY_SECRET: MY_APP_KEY      # GitHub secrets name
+          GH_APP_OWNER: my-org               # App installation owner
+```
+
+This renders the workflow with `${{ vars.MY_APP_ID }}`, `${{ secrets.MY_APP_KEY }}`, and `owner: my-org`.
 
 ## Customization
 
