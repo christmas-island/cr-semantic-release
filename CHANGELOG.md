@@ -1,3 +1,9 @@
+## [1.2.1](https://github.com/christmas-island/cr-semantic-release/compare/v1.2.0...v1.2.1) (2026-03-15)
+
+### Bug Fixes
+
+* revert template vars — GHA ${{ }} collides with ${} template syntax ([e4a8514](https://github.com/christmas-island/cr-semantic-release/commit/e4a8514405acb48c8dcd5be8df63fa8c67f57384)), closes [common-repo/common-repo#TBD](https://github.com/common-repo/common-repo/issues/TBD)
+
 ## [1.2.0](https://github.com/christmas-island/cr-semantic-release/compare/v1.1.0...v1.2.0) (2026-03-15)
 
 ### Documentation
