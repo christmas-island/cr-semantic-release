@@ -1,0 +1,7 @@
+# Source-level common-repo config
+# Excludes files that are part of this template repo itself,
+# not intended to be distributed to consumers.
+- exclude:
+    - "README.md"
+    - ".common-repo.yaml"
+    - "LICENSE"
