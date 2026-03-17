@@ -1,0 +1,10 @@
+# Consumer config: inherit shared dev tooling from cr-upstream-repo
+- repo:
+    url: https://github.com/common-repo/cr-upstream-repo
+    ref: v1
+
+# Override upstream template vars for christmas-island
+- template-vars:
+    GH_APP_ID_SECRET: CHRISTMAS_ISLAND_APP_ID
+    GH_APP_KEY_SECRET: CHRISTMAS_ISLAND_PRIVATE_KEY
+    GH_APP_OWNER: christmas-island

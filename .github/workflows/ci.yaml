@@ -1,46 +1,38 @@
 name: CI
 
 on:
-  workflow_call:
   pull_request:
+  push:
     branches:
       - main
+  workflow_call:
+
+permissions:
+  contents: read
 
 jobs:
-  sync-check:
-    name: Verify src/ sync
+  lint:
+    name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-      - name: Check top-level files match src/
-        run: |
-          # Verify distributed files in src/ match the repo's own copies
-          status=0
-          for file in .releaserc.yaml commitlint.config.cjs; do
-            if ! diff -q "$file" "src/$file" > /dev/null 2>&1; then
-              echo "❌ $file differs from src/$file"
-              diff --color "$file" "src/$file" || true
-              status=1
-            else
-              echo "✅ $file matches src/$file"
-            fi
-          done
-          for file in .github/workflows/commitlint.yml; do
-            if ! diff -q "$file" "src/$file" > /dev/null 2>&1; then
-              echo "❌ $file differs from src/$file"
-              diff --color "$file" "src/$file" || true
-              status=1
-            else
-              echo "✅ $file matches src/$file"
-            fi
-          done
-          # release.yaml intentionally differs: src/ uses template vars, top-level uses hardcoded defaults
-          echo "⏭️  .github/workflows/release.yaml skipped (template vars in src/)"
-          if [ $status -ne 0 ]; then
-            echo ""
-            echo "Top-level files and src/ are out of sync."
-            echo "Copy changes to both locations, or run: cp .releaserc.yaml commitlint.config.js src/ && cp .github/workflows/commitlint.yml .github/workflows/release.yaml src/.github/workflows/"
-            exit 1
-          fi
-          echo ""
-          echo "All distributed files in sync ✅"
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - uses: pre-commit/action@v3.0.1
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: common-repo/setup-common-repo@v1
+
+      - name: Validate configuration
+        run: common-repo validate
+
+      - name: Dry-run apply
+        run: common-repo apply --dry-run
