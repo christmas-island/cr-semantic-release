@@ -1,0 +1,16 @@
+# Consumer config: inherit shared dev tooling from cr-upstream-repo
+- repo:
+    url: https://github.com/common-repo/cr-upstream-repo
+    ref: v1
+
+- exclude:
+    # cr-semantic-release owns these — don't inherit from upstream
+    - ".releaserc.yaml"
+    - "commitlint.config.cjs"
+    - "src/commitlint.config.cjs"
+    - ".github/workflows/release.yaml"
+    - ".github/workflows/commitlint.yml"
+    # Upstream docs/metadata not relevant
+    - "CHANGELOG.md"
+    - "LICENSE"
+    - "README.md"
