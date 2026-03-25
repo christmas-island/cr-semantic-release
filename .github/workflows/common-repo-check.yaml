@@ -16,10 +16,10 @@ jobs:
       - uses: common-repo/setup-common-repo@v1
 
       - name: Check for updates
-        run: common-repo check --updates --config .common-repo-upstream.yaml
+        run: common-repo check --updates
 
       - name: Show diff
         run: |
-          common-repo diff --config .common-repo-upstream.yaml --summary || true
+          common-repo diff --summary || true
           echo "---"
-          common-repo diff --config .common-repo-upstream.yaml || true
+          common-repo diff || true
