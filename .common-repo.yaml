@@ -1,3 +1,14 @@
+# Consumer config: inherit shared dev tooling from cr-upstream-repo
+- self:
+    - repo:
+        url: https://github.com/common-repo/cr-upstream-repo
+        ref: v1
+    - exclude:
+        - ".releaserc.yaml"
+        - "commitlint.config.cjs"
+        - ".github/workflows/release.yaml"
+        - ".github/workflows/commitlint.yml"
+
 # Source-level config: only expose src/ contents, renamed to root.
 - include:
     - "src/**"
