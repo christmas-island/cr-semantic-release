@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
 
 jobs:
   commitlint:
@@ -18,4 +17,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: wagoid/commitlint-github-action@v6
+      - name: Conventional commit check
+        uses: cocogitto/cocogitto-action@v4
+        with:
+          command: check

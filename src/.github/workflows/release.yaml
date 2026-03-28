@@ -8,16 +8,12 @@ on:
 
 permissions:
   contents: write
-  issues: write
-  pull-requests: write
 
 jobs:
   ci:
     name: CI
     permissions:
-      issues: write
       contents: write
-      pull-requests: write
     uses: ./.github/workflows/ci.yaml
     secrets: inherit
 
@@ -30,41 +26,55 @@ jobs:
     steps:
       - name: Generate app token
         id: app-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.${GH_APP_ID_VAR:-CHRISTMAS_ISLAND_APP_ID} }}
           private-key: ${{ secrets.${GH_APP_KEY_SECRET:-CHRISTMAS_ISLAND_PRIVATE_KEY} }}
           owner: ${GH_APP_OWNER:-christmas-island}
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
           persist-credentials: true
-      - uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5
-        with:
-          cache: npm
-          cache-dependency-path: ".releaserc.yaml"
-          node-version: lts/*
-      - name: Semantic Release
+
+      - name: Cocogitto Release
         id: release
-        run: |
-          # Semantic Release
-          npm install --no-save --no-package-lock \
-            "@semantic-release/commit-analyzer" \
-            "@semantic-release/release-notes-generator" \
-            "@semantic-release/changelog" \
-            "@semantic-release/git" \
-            "@semantic-release/github" \
-            "semantic-release-major-tag" \
-            "conventional-changelog-conventionalcommits"
-          npx semantic-release > release.log 2>&1 || true
-          cat release.log
-          if grep -q "There are no relevant changes, so no new version is released." release.log; then
-            echo "publish=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "publish=true" >> "$GITHUB_OUTPUT"
-          fi
+        uses: cocogitto/cocogitto-action@v4
+        with:
+          command: bump
+          args: --auto
+          git-user: 'cog-bot'
+          git-user-email: 'cog-bot@users.noreply.github.com'
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - name: Generate changelog
+        if: steps.release.outputs.version != ''
+        id: changelog
+        uses: cocogitto/cocogitto-action@v4
+        with:
+          command: changelog
+          args: --at v${{ steps.release.outputs.version }}
+
+      - name: Update major version tag
+        if: steps.release.outputs.version != ''
+        run: |
+          VERSION="${{ steps.release.outputs.version }}"
+          MAJOR="v${VERSION%%.*}"
+          git tag -f "$MAJOR"
+          git push origin "$MAJOR" --force
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+
+      - name: Create GitHub release
+        if: steps.release.outputs.version != ''
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.release.outputs.version }}
+          body: ${{ steps.changelog.outputs.stdout }}
+          token: ${{ steps.app-token.outputs.token }}
+
     outputs:
-      publish: ${{ steps.release.outputs.publish }}
+      publish: ${{ steps.release.outputs.version != '' }}
